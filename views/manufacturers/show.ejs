@@ -1,0 +1,221 @@
+<% layout('layouts/boilerplate')%>
+
+    <h1>
+        Manufacturer: <%= manufacturer.company %>
+    </h1>
+
+    <div class="row">
+        <div class="col">
+            <h6>
+                Site created by: <strong>
+                    <%= manufacturer.authorSite.username %>
+                </strong>
+
+                at: <%= manufacturer.createdAt.toDateString()%>
+            </h6>
+            <h6>
+                <% if( (manufacturer.createdAt - Date.now()>1)) {%>
+                    ( <%= - Math.floor( (manufacturer.createdAt - Date.now())/10368000000)%> weeks ago)
+                        <% } %>
+                            <% if( (manufacturer.updatedAt.toDateString() !=manufacturer.createdAt.toDateString())) {%>
+                                Edited at: <%= manufacturer.updatedAt.toDateString()%>
+                                    <% } %>
+
+                                        <% if( (manufacturer.updatedAt - Date.now()>1)) {%> ( <%= - Math.floor(
+                                                (manufacturer.updatedAt - Date.now())/10368000000)%> weeks ago)
+                                                <% } %>
+            </h6>
+
+        </div>
+        <div class="col">
+
+        </div>
+        <div class="col-2">
+            <h6>
+                current Login: <strong>
+                    <%= currentUser.username%>
+                </strong><a style="color:rgb(7, 157, 250)" href="/logout"> logout</a>
+            </h6>
+        </div>
+    </div>
+
+
+    <div class="container">
+        <p style="color:rgba(63, 63, 65, 0.648)">Product details are displayed only for GMP approved
+            manufacturing sites</p>
+
+        <div class="row">
+            <div class="card mb-3, col-6">
+                <div class="card-body">
+                    <h2>Site Details</h2>
+                    <ul>
+                        <li>Country: <%= manufacturer.country%>
+                        </li>
+                        <li>City: <%= manufacturer.city %>
+                        </li>
+                        <li>Site Name: <%= manufacturer.siteName %>
+                        </li>
+                        <li>Site Address: <%= manufacturer.siteAdres%>
+                        </li>
+
+                        <br>
+                        <li>Production line: <%= manufacturer.productionLine %>
+                        </li>
+                        <li>Production Capacity (annual): <%= manufacturer.annualCapacity%>
+                        </li>
+                    </ul>
+                    <div>
+                        <% if( currentUser && manufacturer.authorSite.equals(currentUser._id) &&
+                            manufacturer.status==="SITE_SUSPENDED" ) {%>
+                            <a class="btn btn-warning" href="/manufacturers/<%=manufacturer._id%>/edit">Update
+                                Manufacturer
+                                Details</a>
+                            <% } %>
+                    </div>
+
+                    <br>
+                    <p style="color:rgba(63, 63, 65, 0.648)">Site details can be updated only when the status is
+                        'suspended' so that the changes will be reviewed first for approval. Meanwhile no new products
+                        can be added for this site</p>
+                    <div>
+                        Status:
+                        <% if(manufacturer.status==="SITE_SUSPENDED" ) {%>
+                            <span style="color:rgb(234, 0, 255)">
+                                <%=manufacturer.status %>
+                            </span>
+                            <% } %>
+
+                                <% if(manufacturer.status==="SITE_REJECTED" ) {%>
+                                    <span style="color:rgb(255, 17, 0)">
+                                        <%=manufacturer.status %>
+                                    </span>
+                                    <% } %>
+
+                                        <% if(manufacturer.status==="SITE_APPROVED" ) {%>
+                                            <span style="color:rgb(9, 143, 1)">
+                                                <%=manufacturer.status %>
+                                            </span>
+                                            <% } %>
+
+                                                <% if(manufacturer.status==="SITE_INSPECTION" ) {%>
+                                                    <span style="color:rgb(250, 112, 7)">
+                                                        <%=manufacturer.status %>
+                                                    </span>
+                                                    <% } %>
+                    </div>
+                    <br>
+                    <br>
+
+                    <% if(currentUser && currentUser.isAdmin) {%>
+                        <a class="btn btn-warning" href="/manufacturers/<%=manufacturer._id%>/status"
+                            role="button">Change
+                            Status of Site</a>
+                        <% } %>
+                </div>
+            </div>
+
+            <div class="card mb-3, col-6">
+                <div class="card-body">
+                    <% if(manufacturer.status==="SITE_APPROVED" ) {%>
+                        <h2>Products</h2>
+                        <ul>
+                            <% for(let product of manufacturer.products) {%>
+                                <li><a href="/products/<%=product._id%>">
+                                        <%=product.productName%>
+                                            <%=product.dosageForm%>
+                                    </a></li>
+                                <% } %>
+                        </ul>
+                        <br>
+
+                        <p>
+
+
+                            <a class="btn btn-success" href="/manufacturers/<%=manufacturer._id%>/products/new">Add
+                                a New
+                                Product</a>
+                            <% }%>
+                        </p>
+                </div>
+            </div>
+        </div>
+
+        <br>
+        <br>
+
+        <div class="row">
+            <div class="card mb-3, col-12">
+                <h3 class="card-title mb-2 text-muted">
+                    Disclosure of GMP Compliance issues</h3>
+                <h6 class="text-muted">API source(s) and FPP site(s)</h6>
+                <div class="card-body">
+                    <form action="/manufacturers/<%=manufacturer._id%>/gmps" method="POST" class="mb-3 validated-form"
+                        novalidate>
+                        <div class="mb-3">
+                            <label class="form-label" for="bodygmp">Describe
+                                open CAPAs with due
+                                dates</label>
+                            <textarea class="form-control" name="gmp[bodygmp]" id="bodygmp" cols="30" rows="3"
+                                required></textarea>
+                            <div class="valid-feedback">
+                                Looks good!
+                            </div>
+                        </div>
+                        <button class="btn btn-success">Submit</button>
+                    </form>
+                </div>
+
+            </div>
+
+            <div class="card mb-3, col-12">
+                <h3 class="card-title mb-2 text-muted">
+                    CAPAs to be followed up:</h3>
+                <% for(let gmp of manufacturer.gmps) { %>
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h6 class="card-subtitle mb-2 text-muted">
+                                <em>Entered By: <%= gmp.authorGmp.username%> - at: <%= gmp.createdAt.toDateString()%> (
+                                            <%= - Math.floor( (gmp.createdAt - Date.now())/10368000000)%> weeks ago)
+                                </em>
+                            </h6>
+                            <p class="card-text">
+                                <span style="color:black">
+                                    <%= gmp.bodygmp %>
+                                </span>
+
+                                <% if( currentUser && gmp.authorGmp.equals(currentUser._id) || currentUser &&
+                                    currentUser.isAdmin) {%>
+                                    <form action="/manufacturers/<%=manufacturer._id%>/gmps/<%=gmp._id%>?_method=DELETE"
+                                        method="POST">
+                                        <button class="btn btn-sm btn-primary">Close</button>
+                                    </form>
+                                    <% } %>
+                        </div>
+                    </div>
+                    <% } %>
+            </div>
+        </div>
+
+
+        <br>
+        <br>
+
+        <% if(currentUser && currentUser.isAdmin) {%>
+            <form action="/manufacturers/<%=manufacturer._id%>?_method=DELETE" method="POST">
+                <button class="btn-danger btn-sm">Delete
+                    this Manufacturer</button>
+            </form>
+
+
+            <% } %>
+
+
+
+                <hr>
+                <a href="/manufacturers">Back to
+                    Manufacturer Index</a>
+                <br>
+                <br>
+                <a href="/">IRIMS Home</a>
+
+    </div>

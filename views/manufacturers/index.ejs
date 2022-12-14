@@ -1,0 +1,240 @@
+<% layout('layouts/boilerplate')%>
+
+
+    <div class="container mt-3">
+
+        <nav class="navbar  navbar-expand-lg navbar-light" style="background-color: #007E33;">
+            <div class="container-fluid">
+                <div><a class="navbar-brand" style="color:white; padding-left: 0.5em;"
+                        href="/"><strong>IRIMS</strong></a>
+                </div>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarNavDropdown" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                    <ul class="navbar-nav">
+                        <li>
+                            <a class="btn btn-primary btn-sm"
+                                style=" margin-left: 15px; margin-right: 15px; margin-top: 5px; margin-bottom: 5px"
+                                href="/manufacturers?status=SITE_APPROVED" role="button">
+                                Approved Sites
+                            </a>
+                        </li>
+                        <li><a class="btn btn-warning btn-sm"
+                                style=" margin-left: 15px; margin-right: 15px; margin-top: 5px; margin-bottom: 5px"
+                                href="./manufacturers?status=SITE_INSPECTION" role="button">
+                                Sites To Be Inspected
+                            </a></li>
+
+                        <li> <a class="btn btn-danger btn-sm"
+                                style=" margin-left: 15px; margin-right: 15px; margin-top: 5px; margin-bottom: 5px"
+                                href="./manufacturers?status=SITE_SUSPENDED" role="button">
+                                Suspended Sites
+                            </a></li>
+
+                        <li><a class="btn btn-danger btn-sm"
+                                style=" margin-left: 15px; margin-right: 15px; margin-top: 5px; margin-bottom: 5px"
+                                href="./manufacturers?status=SITE_REJECTED" role="button">
+                                Rejected Sites
+                            </a></li>
+                    </ul>
+
+                    <div class="navbar-nav ml-auto" style="padding-left: 2em">
+                        <input type=" text" id="myInput3" onkeyup="myFunction()"
+                            style="width:14em; padding: 5px 5px 5px 10px" placeholder="Search Company Name ...">
+                    </div>
+                    <div class="navbar-nav ml-auto" style="padding-left: 1em;">
+                        <% if(!currentUser) {%>
+                            <a style="color:lightcyan" class="nav-link" href="/login">Login</a>
+                            <% } else {%>
+                                <a style="color:lightcyan" class="nav-link" href="/logout">
+                                    <%= currentUser.username%> - Logout
+                                </a>
+                                <% } %>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+
+
+        <br>
+        <h1><span style="color: #007E33" ;>Manufacturer Index (<%= manufacturers.length%>)</span></h1>
+        <a href="/manufacturers/new">Add New Manufacturing Site</a>
+
+        <br><br>
+        <div class="table-responsive">
+            <table class="table" ; id="manufacturerTable">
+                <thead>
+                    <tr>
+                        <th onclick="sortTable(0)">
+                            Company
+                        </th>
+                        <th>
+                            Name Site
+                        </th>
+                        <th>
+                            City
+                        </th>
+                        <th>Country
+                        </th>
+                        <th colspan="2">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <% for (let manufacturer of manufacturers) { %>
+                            <td>
+                                <%= manufacturer.company%>
+                            </td>
+                            <td>
+                                <%= manufacturer.siteName%>
+                            </td>
+                            <td>
+                                <%= manufacturer.city%>
+                            </td>
+                            <td>
+                                <%= manufacturer.country%>
+                            </td>
+                            <td>
+                                <% if(manufacturer.status==="SITE_SUSPENDED" ) {%>
+                                    <span style="color:rgb(234, 0, 255)">
+                                        <%=manufacturer.status %>
+                                    </span>
+                                    <% } %>
+
+                                        <% if(manufacturer.status==="SITE_REJECTED" ) {%>
+                                            <span style="color:rgb(255, 17, 0)">
+                                                <%=manufacturer.status %>
+                                            </span>
+                                            <% } %>
+
+                                                <% if(manufacturer.status==="SITE_APPROVED" ) {%>
+                                                    <span style="color:rgb(9, 143, 1)">
+                                                        <%=manufacturer.status %>
+                                                    </span>
+                                                    <% } %>
+
+                                                        <% if(manufacturer.status==="SITE_INSPECTION" ) {%>
+                                                            <span style="color:rgb(250, 112, 7)">
+                                                                <%=manufacturer.status %>
+                                                            </span>
+                                                            <% } %>
+
+                            </td>
+                            <td>
+                                <p><a class="btn btn-success btn-sm"
+                                        style="padding-right: 1em; padding-left: 1em; margin-left: 1em;"
+                                        href="manufacturers/<%=manufacturer._id%>">Site Details</a>
+
+                            </td>
+
+                    </tr>
+                </tbody>
+                <% } %>
+            </table>
+        </div>
+        <br>
+        <p style="color:rgba(63, 63, 65, 0.648)">To enter a new product application (CLick Site Details), the associated
+            Site must
+            have a GMP 'Approved' status in the system.
+        </p>
+
+        <br>
+
+        <% if(status !=="All" ) {%>
+            <a href="/manufacturers">Back to All Manufacturers</a>
+
+            <% }%>
+                <br>
+                <br>
+                <div>
+                    <a class="btn btn-primary" href="/products">Go to Product Index</a>
+                </div>
+
+
+                <script>
+                    function sortTable(n) {
+                        var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+                        table = document.getElementById("manufacturerTable");
+                        switching = true;
+                        // Set the sorting direction to ascending:
+                        dir = "asc";
+                        /* Make a loop that will continue until
+                        no switching has been done: */
+                        while (switching) {
+                            // Start by saying: no switching is done:
+                            switching = false;
+                            rows = table.rows;
+                            /* Loop through all table rows (except the
+                            first, which contains table headers): */
+                            for (i = 1; i < (rows.length - 1); i++) {
+                                // Start by saying there should be no switching:
+                                shouldSwitch = false;
+                                /* Get the two elements you want to compare,
+                                one from current row and one from the next: */
+                                x = rows[i].getElementsByTagName("TD")[n];
+                                y = rows[i + 1].getElementsByTagName("TD")[n];
+                                /* Check if the two rows should switch place,
+                                based on the direction, asc or desc: */
+                                if (dir == "asc") {
+                                    if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                                        // If so, mark as a switch and break the loop:
+                                        shouldSwitch = true;
+                                        break;
+                                    }
+                                } else if (dir == "desc") {
+                                    if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                                        // If so, mark as a switch and break the loop:
+                                        shouldSwitch = true;
+                                        break;
+                                    }
+                                }
+                            }
+                            if (shouldSwitch) {
+                                /* If a switch has been marked, make the switch
+                                and mark that a switch has been done: */
+                                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                                switching = true;
+                                // Each time a switch is done, increase this count by 1:
+                                switchcount++;
+                            } else {
+                                /* If no switching has been done AND the direction is "asc",
+                                set the direction to "desc" and run the while loop again. */
+                                if (switchcount == 0 && dir == "asc") {
+                                    dir = "desc";
+                                    switching = true;
+                                }
+                            }
+                        }
+                    }
+                </script>
+
+                <script>
+                    function myFunction() {
+                        // Declare variables
+                        var input, filter, table, tr, td, i, txtValue;
+                        input = document.getElementById("myInput3");
+                        filter = input.value.toUpperCase();
+                        table = document.getElementById("manufacturerTable");
+                        tr = table.getElementsByTagName("tr");
+
+                        // Loop through all table rows, and hide those who don't match the search query
+                        for (i = 0; i < tr.length; i++) {
+                            td = tr[i].getElementsByTagName("td")[0];
+                            if (td) {
+                                txtValue = td.textContent || td.innerText;
+                                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                                    tr[i].style.display = "";
+                                } else {
+                                    tr[i].style.display = "none";
+                                }
+                            }
+                        }
+                    }
+                </script>
+
+                <hr> <br>
+                <a href="/">IRIMS Home</a>
+    </div>

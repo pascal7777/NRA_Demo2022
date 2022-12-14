@@ -1,0 +1,8 @@
+main {
+    align-items: center;
+    justify-content: center;
+    background-image:
+        url("/art.jpeg");
+    background-size: cover;
+    background-position: left;
+}

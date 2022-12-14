@@ -1,0 +1,44 @@
+<% layout('layouts/boilerplate')%>
+
+    <div class="container mt-3">
+
+
+
+        <h2>Add a Product Batch (lot)</h2>
+        <p style="color:rgba(63, 63, 65, 0.648)">Status is by default 'QC' (Testing)</p>
+        <h3>
+            Product: <%=product.productName%>
+                <%=product.dosageForm%>
+        </h3>
+        <form action="/products/<%=product._id%>/productLots" method="POST">
+
+            <div class="mb-2">
+                <label for="lotNumber">New Batch number</label>
+                <input type="text" name="lotNumber" id="lotNumber" placeholder="Batch No">
+            </div>
+            <div class="mb-2">
+                <label for="manufacture">Manufacturing date</label>
+                <input type="date" name="manufacture" id="manufacture" placeholder="Batch Manufacturing date">
+            </div>
+            <div class="mb-2">
+                <label for="expire">Expiry date</label>
+                <input type="date" name="expire" id="expire" placeholder="Batch Expiry date">
+            </div>
+            <div class="mb-2">
+                <label for="size">Batch Size</label>
+                <input type="number" name="size" id="size" placeholder="Batch Size">
+            </div>
+            <div class="mb-2">
+                <label for="qcLab">QC Lab for Batch testing (COA)</label>
+                <input type="text" name="qcLab" id="qcLab" placeholder="Name QC Lab">
+            </div>
+
+
+            <br> <br>
+            <button class="btn btn-primary">Submit Batch</button>
+        </form>
+
+        <br>
+        <hr> <br>
+        <a href="/">IRIMS Home</a>
+    </div>

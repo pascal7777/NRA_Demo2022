@@ -1,0 +1,284 @@
+<% layout('layouts/boilerplate')%>
+
+    <h1>
+        Product: <%= product.productName %>
+    </h1>
+
+
+    <div class="row">
+        <div class="col">
+            <h6>
+                Product created by: <strong>
+                    <%= product.authorProduct.username %>
+                </strong>
+                at: <%= product.createdAt.toDateString()%> (
+                    <%= - Math.floor( (product.createdAt - Date.now())/10368000000)%> weeks ago)
+                        <br>Last edited
+                        at: <%= product.updatedAt.toDateString()%>
+                            (<%= - Math.floor( (product.updatedAt - Date.now())/10368000000)%> weeks ago)
+
+            </h6>
+        </div>
+        <div class="col">
+
+        </div>
+        <div class="col-2">
+            <h6>
+                current Login: <strong>
+                    <%= currentUser.username%>
+                </strong><a style="color:rgb(7, 157, 250)" href="/logout"> logout</a>
+            </h6>
+        </div>
+    </div>
+
+
+    <div class="container">
+        <p style="color:rgba(63, 63, 65, 0.648)">Batch details are displayed only for approved or otherwise authorized
+            products</p>
+        <div class="row">
+
+            <div class="card mb-3, col-5">
+                <div class="card-body">
+                    <% if(product.status==="APPROVED" ){%>
+                        <h2>Registration holder</h2>
+                        <li>
+                            <%=product.registrationHolder%>
+                        </li>
+                        <% } %>
+                            <br>
+                            <h2>Product Details</h2>
+                            <ul>
+                                <li>INN Name: <%=product.innName%>
+                                </li>
+                                <li>ATC code: <%=product.atcCode%>
+                                </li>
+                                <li>API Source(s): <%=product.apiSource%>
+                                </li>
+                                <li>Dosage Form: <%=product.dosageForm%>
+                                </li>
+
+                                <li>Strength: <%= product.strength%>
+                                        <%=product.strengthUnit%>
+                                </li>
+                            </ul>
+                            <ul>
+                                <li>Pack Size: <%=product.packSize%>
+                                        <%=product.packUnit%>
+                                </li>
+
+                                <li>Shelf life (m): <%=product.shelfLife%>
+                                </li>
+                            </ul>
+
+
+                            <% if( currentUser && product.authorProduct.equals(currentUser._id) &&
+                                product.status==="SUSPENDED" | product.status==="REVIEW" ) {%>
+                                <div>
+                                    <a class="btn btn-warning" href="/products/<%=product._id%>/edit">Edit Product
+                                        Information</a>
+                                </div>
+                                <br>
+                                <% } %>
+
+
+
+
+
+                                    <ul>
+                                        <li>Manufacturer (site): <a href="/manufacturers/<%=product.manufacturer._id%>">
+                                                <%= product.manufacturer.company%>
+                                            </a></li>
+                                        <li> Origin: <%=product.manufacturer.country%>
+                                        </li>
+                                        <li> Site Status: <strong>
+                                                <% if(product.manufacturer.status==="SITE_SUSPENDED" ) {%>
+                                                    <span style="color:rgb(234, 0, 255)">
+                                                        <%=product.manufacturer.status %>
+                                                    </span>
+                                                    <% } %>
+
+                                                        <% if(product.manufacturer.status==="SITE_REJECTED" ) {%>
+                                                            <span style="color:rgb(255, 17, 0)">
+                                                                <%=product.manufacturer.status %>
+                                                            </span>
+                                                            <% } %>
+
+                                                                <% if(product.manufacturer.status==="SITE_APPROVED" )
+                                                                    {%>
+                                                                    <span style="color:rgb(9, 143, 1)">
+                                                                        <%=product.manufacturer.status %>
+                                                                    </span>
+                                                                    <% } %>
+                                            </strong>
+                                        </li>
+                                    </ul>
+
+                                    <ul>
+                                        <li> Product Image: </li>
+                                        <img class="img-fluid" alt="" src="<%= product.image%>">
+
+                                    </ul>
+
+                                    <ul>
+                                        <li>
+                                            Product Status: <strong>
+                                                <% if(product.status==="SUSPENDED" ) {%>
+                                                    <span style="color:rgb(234, 0, 255)">
+                                                        <%=product.status %>
+                                                    </span>
+                                                    <% } %>
+
+                                                        <% if(product.status==="REJECTED (SUBSTANDARD)" ) {%>
+                                                            <span style="color:rgb(255, 17, 0)">
+                                                                <%=product.status %>
+                                                            </span>
+                                                            <% } %>
+
+                                                                <% if(product.status==="APPROVED" ) {%>
+                                                                    <span style="color:rgb(9, 143, 1)">
+                                                                        <%=product.status %>
+                                                                    </span>
+                                                                    <% } %>
+
+                                                                        <% if(product.status==="REVIEW" ) {%>
+                                                                            <span style="color:rgb(250, 112, 7)">
+                                                                                <%=product.status %>
+                                                                            </span>
+                                                                            <% } %>
+                                            </strong>
+                                        </li>
+
+                                        <% if(currentUser && currentUser.isAdmin) {%>
+
+                                            <% if(product.manufacturer.status!=="SITE_APPROVED" ) {%>
+                                                <p><em>Product Status can be changed only when the associated
+                                                        manufacturing site
+                                                        is approved</em></p>
+                                                <% }%>
+                                    </ul>
+
+                                    <% if(product.manufacturer.status==="SITE_APPROVED" ) {%>
+                                        <div> <a class="btn btn-warning" href="/products/<%=product._id%>/status"
+                                                role="button">Change
+                                                Product
+                                                Status</a>
+                                        </div>
+                                        <% }%>
+                                            <% }%>
+                </div>
+            </div>
+
+            <br>
+
+            <div class="card mb-3, col-7">
+                <div class="card-body">
+
+
+                    <ul>
+                        <table style="width: 100%">
+                            <h2>Batch Details</h2>
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <h5>Batch No</h5>
+                                    </th>
+                                    <th>
+                                        <h5>Batch Exp Date</h5>
+                                    </th>
+                                    <th>
+                                        <h5>Status</h5>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <% for(let productLot of product.productLots) {%>
+                                        <td>
+                                            <a href="/productLots/<%=productLot._id%>">
+                                                <%=productLot.lotNumber%>
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <%=productLot.expire.toDateString()%>
+                                        </td>
+                                        <td>
+                                            <% if(productLot.status==="HOLD" ) {%>
+                                                <span style="color:rgb(234, 0, 255)">
+                                                    <%=productLot.status %>
+                                                </span>
+                                                <% } %>
+
+                                                    <% if(productLot.status==="RECALLED (SUBSTANDARD)" ) {%>
+                                                        <span style="color:rgb(255, 17, 0)">
+                                                            <%=productLot.status %>
+                                                        </span>
+                                                        <% } %>
+
+                                                            <% if(productLot.status==="RELEASED" ) {%>
+                                                                <span style="color:rgb(9, 143, 1)">
+                                                                    <%=productLot.status %>
+                                                                </span>
+                                                                <% } %>
+
+                                                                    <% if(productLot.status==="QC" ) {%>
+                                                                        <span style="color:rgb(250, 112, 7)">
+                                                                            <%=productLot.status %>
+                                                                        </span>
+                                                                        <% } %>
+                                        </td>
+                                </tr>
+                            </tbody>
+                            <% } %>
+                        </table>
+                    </ul>
+                    <p>
+
+                        <br>
+                        <% if(product.status==='APPROVED' ) {%>
+                            <ul>
+                                <a class="btn btn-success" href="/products/<%=product._id%>/productLots/new">Add a
+                                    batch</a>
+                            </ul>
+                            <% }%>
+
+                                <% if(product.status==='EUA' ) {%>
+                                    <ul>
+                                        <a class="btn btn-success" href="/products/<%=product._id%>/productLots/new">Add
+                                            a
+                                            batch</a>
+                                    </ul>
+                                    <% }%>
+
+                                        <% if(product.status==='CTSTUDY' ) {%>
+                                            <ul>
+                                                <a class="btn btn-success"
+                                                    href="/products/<%=product._id%>/productLots/new">Add
+                                                    a
+                                                    batch</a>
+                                            </ul>
+                                            <% }%>
+                    </p>
+
+
+                </div>
+            </div>
+        </div>
+
+
+        <br>
+        <br>
+
+        <% if(currentUser && currentUser.isAdmin) {%>
+            <form action="/products/<%=product._id%>?_method=DELETE" method="POST">
+                <button class="btn-danger btn-sm">Delete this Product</button>
+            </form>
+
+
+
+
+            <% } %>
+
+                <hr>
+
+                <a href="/products">Back to Product Index</a>
+                <br><br><a href="/productLots">Batch Index</a>

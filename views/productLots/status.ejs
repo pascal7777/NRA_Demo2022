@@ -1,0 +1,95 @@
+<% layout('layouts/boilerplate')%>
+
+    <div class="container mt-3">
+        <h1>Batch Status Change</h1>
+        <br>
+        <h2>
+            Batch: <%=productLot.lotNumber%>
+                <%=productLot.product.productName%>
+        </h2>
+
+
+        <form action="/productLots/<%=productLot._id%>?_method=PUT" method="POST">
+
+            <br>
+            <hr>
+
+
+            <label for="status">
+                <h4>Update Status from <% if(productLot.status===" HOLD" ) {%>
+                        <span style="color:rgb(234, 0, 255)">
+                            <%=productLot.status %>
+                        </span>
+                        <% } %>
+
+                            <% if(productLot.status==="RECALLED (SUBSTANDARD)" ) {%>
+                                <span style="color:rgb(255, 17, 0)">
+                                    <%=productLot.status %>
+                                </span>
+                                <% } %>
+                                    <% if(productLot.status==="RECALLED (FALSFIED)" ) {%>
+                                        <span style="color:rgb(255, 17, 0)">
+                                            <%=productLot.status %>
+                                        </span>
+                                        <% } %>
+
+                                            <% if(productLot.status==="RELEASED" ) {%>
+                                                <span style="color:rgb(9, 143, 1)">
+                                                    <%=productLot.status %>
+                                                </span>
+                                                <% } %>
+
+                                                    <% if(productLot.status==="QC" ) {%>
+                                                        <span style="color:rgb(250, 112, 7)">
+                                                            <%=productLot.status %>
+                                                        </span>
+                                                        <% } %>
+
+
+            </label>
+            <h5><select name="productLot[status]" id="status">
+                    <option value="">--Select--</option>
+                    <option value="RELEASED">RELEASED, Trials or EUA</option>
+                    <option value="HOLD">On Hold</option>
+                    <option value="RECALLED (SUBSTANDARD)">RECALLED/SUBSTANDARD</option>
+                    <option value="RECALLED (FALSFIED)">RECALLED/FALSIFIED</option>
+                </select></h5>
+            <br>
+            <br>
+            <br>
+
+
+
+            <div class="mb-2"><label class="importer" for="importer">Name Importer</label>
+                <input class="form-control" type="text" name="productLot[importer]" id="importer"
+                    value="<%=productLot.importer%>">
+            </div>
+
+            <br>
+            <div class="mb-2"><label class="nameQp" for="nameQp">Name Importer</label>
+                <input class="form-control" type="text" name="productLot[nameQp]" id="nameQp"
+                    value="<%=productLot.nameQp%>">
+            </div>
+            <br>
+            <div>
+                <button class=" btn btn-warning btn-sm">Confirm Status Change</button>
+            </div>
+        </form>
+
+
+
+        <hr>
+
+        <br>
+        <a class="btn btn-primary btn-sm" href="/productLots/<%=productLot._id%>" role="button">Go Back to Batch
+            details</a>
+        <br>
+        <br>
+        <a href="/">Home</a>
+    </div>
+
+
+
+    <br>
+
+    </div>

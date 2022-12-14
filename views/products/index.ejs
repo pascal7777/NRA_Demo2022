@@ -1,0 +1,267 @@
+<% layout('layouts/boilerplate')%>
+
+
+    <div class="container mt-3">
+
+        <nav class="navbar  navbar-expand-lg navbar-light" style="background-color: #1e74ec;">
+            <div class="container-fluid">
+                <div><a class="navbar-brand" style="color:white; padding-left: 0.5em;"
+                        href="/"><strong>IRIMS</strong></a>
+                </div>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarNavDropdown" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                    <ul class="navbar-nav">
+                        <li>
+                            <a class="btn btn-success btn-sm"
+                                style=" margin-left: 15px; margin-right: 15px; margin-top: 5px; margin-bottom: 5px"
+                                href="./products?status=APPROVED" role="button">
+                                Approved
+                            </a>
+                        </li>
+                        <li><a class="btn btn-warning btn-sm"
+                                style=" margin-left: 15px; margin-right: 15px; margin-top: 5px; margin-bottom: 5px"
+                                href="./products?status=REVIEW" role="button">
+                                Under Review
+                            </a></li>
+
+                        <li> <a class="btn btn-danger btn-sm"
+                                style=" margin-left: 15px; margin-right: 15px; margin-top: 5px; margin-bottom: 5px"
+                                href="./products?status=SUSPENDED" role="button">
+                                Suspended
+                            </a></li>
+
+                        <li><a class="btn btn-danger btn-sm"
+                                style=" margin-left: 15px; margin-right: 15px; margin-top: 5px; margin-bottom: 5px"
+                                href="./products?status=REJECTED" role="button">
+                                Rejected
+                            </a></li>
+                    </ul>
+
+                    <div class="navbar-nav ml-auto" style="padding-left: 6em">
+                        <input type="text" id="myInput2" onkeyup="myFunction()"
+                            style="width:18em; padding: 5px 5px 5px 10px" placeholder="Search Product Name....">
+
+                        <div class="navbar-nav ml-auto" style="padding-left: 5em;">
+                            <% if(!currentUser) {%>
+                                <a style="color:lightcyan" class="nav-link" href="/login">Login</a>
+                                <% } else {%>
+                                    <a style="color:lightcyan" class="nav-link" href="/logout">
+                                        <%= currentUser.username%> - Logout
+                                    </a>
+                                    <% } %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <br>
+        <h1><span style="color: #1e74ec">Product Index (<%= products.length%>)</span></h1>
+        <p style="color:rgba(63, 63, 65, 0.648)">New products can be submitted for review only under an approved
+            manufacturing site</p>
+
+        <div class="table-responsive">
+            <table class="table" ; id="productTable">
+                <thead>
+                    <tr>
+                        <th onclick="sortTable(0)">
+                            <h6>Product Name</h6>
+                        </th>
+                        <th>
+                            <h6>INN Name</h6>
+                        </th>
+                        <th>
+                            <h6>Dosage Form</h6>
+                        </th>
+                        <th>
+                            <h6>Strength</h6>
+                        </th>
+                        <th>
+                            <h6>Product Status</h6>
+                        </th>
+                        <th>
+                            <h6>Registration holder</h6>
+                        </th>
+                        <th>
+                            <h6>Registration number</h6>
+                        </th>
+
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <% for (let product of products) { %>
+                            <td>
+                                <%= product.productName%>
+                            </td>
+                            <td>
+                                <%= product.innName%>
+                            </td>
+                            <td>
+                                <%= product.dosageForm%>
+                            </td>
+                            <td>
+                                <%= product.strength%>
+                                    <%= product.strengthUnit%>
+                            </td>
+                            <td>
+                                <% if(product.status==="SUSPENDED" ) {%>
+                                    <span style="color:rgb(234, 0, 255)">
+                                        <%=product.status %>
+                                    </span>
+                                    <% } %>
+
+                                        <% if(product.status==="REJECTED (SUBSTANDARD)" ) {%>
+                                            <span style="color:rgb(255, 17, 0)">
+                                                <%=product.status %>
+                                            </span>
+                                            <% } %>
+
+                                                <% if(product.status==="APPROVED" ) {%>
+                                                    <span style="color:rgb(9, 143, 1)">
+                                                        <%=product.status %>
+                                                    </span>
+                                                    <% } %>
+                                                        <% if(product.status==="REVIEW" ) {%>
+                                                            <span style="color:rgb(250, 112, 7)">
+                                                                <%=product.status %>
+                                                            </span>
+                                                            <% } %>
+
+                                                                <% if(product.status==="QC" ) {%>
+                                                                    <span style="color:rgb(250, 112, 7)">
+                                                                        <%=product.status %>
+                                                                    </span>
+                                                                    <% } %>
+
+                            </td>
+                            <td>
+                                <%= product.registrationHolder%>
+                            </td>
+                            <td>
+                                <%= product.maNumber%>
+                            </td>
+                            <td>
+                                <p><a class="btn btn-primary btn-sm" style="margin-left: 0.5em;"
+                                        href="/products/<%=product._id%>">Details</a>
+                            </td>
+                    </tr>
+                </tbody>
+                <% } %>
+                    <a style="float: right" target="blank" href="https://www.whocc.no/atc_ddd_index/">ATC Code
+                        Index</a>
+            </table>
+        </div>
+
+        <br>
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <a class="btn btn-success" href="/manufacturers">Go to Manufacturer Index</a>
+                </div>
+                <div class="col">
+
+                </div>
+                <div class="col">
+                    <a class="btn btn-primary" href="/productLots">Go to Batch Index</a>
+                </div>
+            </div>
+        </div>
+
+
+
+
+        <% if(status !=="All" ) {%>
+            <a href="/products">Back to All Products</a>
+            <br>
+            <% }%>
+                <br>
+
+                <script>
+                    function sortTable(n) {
+                        var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+                        table = document.getElementById("productTable");
+                        switching = true;
+                        // Set the sorting direction to ascending:
+                        dir = "asc";
+                        /* Make a loop that will continue until
+                        no switching has been done: */
+                        while (switching) {
+                            // Start by saying: no switching is done:
+                            switching = false;
+                            rows = table.rows;
+                            /* Loop through all table rows (except the
+                            first, which contains table headers): */
+                            for (i = 1; i < (rows.length - 1); i++) {
+                                // Start by saying there should be no switching:
+                                shouldSwitch = false;
+                                /* Get the two elements you want to compare,
+                                one from current row and one from the next: */
+                                x = rows[i].getElementsByTagName("TD")[n];
+                                y = rows[i + 1].getElementsByTagName("TD")[n];
+                                /* Check if the two rows should switch place,
+                                based on the direction, asc or desc: */
+                                if (dir == "asc") {
+                                    if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                                        // If so, mark as a switch and break the loop:
+                                        shouldSwitch = true;
+                                        break;
+                                    }
+                                } else if (dir == "desc") {
+                                    if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                                        // If so, mark as a switch and break the loop:
+                                        shouldSwitch = true;
+                                        break;
+                                    }
+                                }
+                            }
+                            if (shouldSwitch) {
+                                /* If a switch has been marked, make the switch
+                                and mark that a switch has been done: */
+                                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                                switching = true;
+                                // Each time a switch is done, increase this count by 1:
+                                switchcount++;
+                            } else {
+                                /* If no switching has been done AND the direction is "asc",
+                                set the direction to "desc" and run the while loop again. */
+                                if (switchcount == 0 && dir == "asc") {
+                                    dir = "desc";
+                                    switching = true;
+                                }
+                            }
+                        }
+                    }
+                </script>
+
+                <script>
+                    function myFunction() {
+                        // Declare variables
+                        var input, filter, table, tr, td, i, txtValue;
+                        input = document.getElementById("myInput2");
+                        filter = input.value.toUpperCase();
+                        table = document.getElementById("productTable");
+                        tr = table.getElementsByTagName("tr");
+
+                        // Loop through all table rows, and hide those who don't match the search query
+                        for (i = 0; i < tr.length; i++) {
+                            td = tr[i].getElementsByTagName("td")[0];
+                            if (td) {
+                                txtValue = td.textContent || td.innerText;
+                                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                                    tr[i].style.display = "";
+                                } else {
+                                    tr[i].style.display = "none";
+                                }
+                            }
+                        }
+                    }
+                </script>
+
+
+                <hr> <br>
+                <a href="/">IRIMS Home</a>
+    </div>

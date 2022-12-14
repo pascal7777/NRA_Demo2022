@@ -1,0 +1,285 @@
+<% layout('layouts/boilerplate')%>
+
+
+    <div class="container mt-3">
+
+
+        <nav class="navbar  navbar-expand-lg navbar-light" style="background-color: #1e74ec;">
+            <div class="container-fluid">
+                <div><a class="navbar-brand" style="color:white; padding-left: 0.5em;"
+                        href="/"><strong>IRIMS</strong></a>
+                </div>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarNavDropdown" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                    <ul class="navbar-nav">
+
+                        <li>
+                            <a class="btn btn-success btn-sm"
+                                style=" margin-left: 15px; margin-right: 15px; margin-top: 5px; margin-bottom: 5px; padding-top:8px; padding-bottom:8px"
+                                href="./productLots?status=RELEASED" role="button">
+                                Released
+                            </a>
+                        </li>
+                        <li><a class="btn btn-warning btn-sm"
+                                style=" margin-left: 15px; margin-right: 15px; margin-top: 5px; margin-bottom: 5px"
+                                href="./productLots?status=QC" role="button">
+                                QC Testing
+                            </a></li>
+
+                        <li><a class="btn btn-danger btn-sm"
+                                style=" margin-left: 15px; margin-right: 15px; margin-top: 5px; margin-bottom: 5px"
+                                href="./productLots?status=HOLD" role="button">
+                                On Hold
+                            </a></li>
+
+                        <li><a class="btn btn-danger btn-sm"
+                                style=" margin-left: 15px; margin-right: 15px; margin-top: 5px; margin-bottom: 5px"
+                                href="./productLots?status=RECALLED" role="button">
+                                Recalled
+                            </a></li>
+
+
+                    </ul>
+
+                    <div style="margin-left:20em">
+                        <input type="text" id="myInput2" onkeyup="myFunction()" style="width:15em"
+                            placeholder="Search for lot numbers....">
+
+
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <div>
+            <span style="color:rgb(2, 10, 242)">
+                <%= Date()%>
+            </span>
+        </div>
+        <br>
+        <h1><span style="color: #1e74ec">Product Batch Index</span>
+            (<%= productLots.length%>)
+        </h1>
+
+        <br>
+
+        <div class="table-responsive">
+            <table class="table" ; id="batchTable">
+                <thead>
+                    <tr>
+                        <th onclick="sortTable(0)">
+                            <h5>Batch No</h5>
+                        </th>
+                        <th>
+                            <h5>Status</h5>
+                        </th>
+                        <th>
+                            <h5>Exp date</h5>
+                        </th>
+                        <th>
+                            <h5>MoRS</h5>
+                        </th>
+                        <th>
+                            <h5>Importer</h5>
+                        </th>
+                        <th>
+                            <h5>QC</h5>
+                        </th>
+                        <th>
+                            <h5>CP</h5>
+                        </th>
+                        <th>
+                            <h5>PV</h5>
+                        </th>
+                        <th>
+
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+
+
+                        <% for (let productLot of productLots) { %>
+
+                            <td>
+                                <%= productLot.lotNumber%>
+                            </td>
+                            <td>
+                                <% if(productLot.status==="HOLD" ) {%>
+                                    <span style="color:rgb(234, 0, 255)">
+                                        <%=productLot.status %>
+                                    </span>
+                                    <% } %>
+
+                                        <% if(productLot.status==="RECALLED (SUBSTANDARD)" ) {%>
+                                            <span style="color:rgb(255, 17, 0)">
+                                                <%=productLot.status %>
+                                            </span>
+                                            <% } %>
+                                                <% if(productLot.status==="RECALLED (FALSFIED)" ) {%>
+                                                    <span style="color:rgb(255, 17, 0)">
+                                                        <%=productLot.status %>
+                                                    </span>
+                                                    <% } %>
+
+                                                        <% if(productLot.status==="RELEASED" ) {%>
+                                                            <span style="color:rgb(9, 143, 1)">
+                                                                <%=productLot.status %>
+                                                            </span>
+                                                            <% } %>
+
+                                                                <% if(productLot.status==="QC" ) {%>
+                                                                    <span style="color:rgb(250, 112, 7)">
+                                                                        <%=productLot.status %>
+                                                                    </span>
+                                                                    <% } %>
+
+                                                                        <% if(productLot.status==="CTSTUDY" ) {%>
+                                                                            <span style="color:rgb(255, 185, 8)">
+                                                                                <%=productLot.status %>
+                                                                            </span>
+                                                                            <% } %>
+
+                                                                                <% if(productLot.status==="EUA" ) {%>
+                                                                                    <span
+                                                                                        style="color:rgb(255, 185, 8)">
+                                                                                        <%=productLot.status %>
+                                                                                    </span>
+                                                                                    <% } %>
+                            </td>
+                            <td>
+                                <%= productLot.expire.toDateString()%>
+                            </td>
+                            <td>
+                                <%= Math.floor( (productLot.expire - Date.now())/2592000000)%>
+                            </td>
+                            <td>
+                                <%= productLot.importer%>
+                            </td>
+                            <td>
+                                <%= productLot.commentqcs.length%>
+                            </td>
+                            <td>
+                                <%= productLot.commentcps.length%>
+                            </td>
+                            <td>
+                                <%= productLot.commentpvs.length%>
+                            </td>
+                            <td>
+                                <a class="btn btn-primary btn-sm"
+                                    style="padding-right: 1em; padding-left: 1em; margin-left: 1em;"
+                                    href="/productLots/<%=productLot._id%>">Details</a>
+                            </td>
+                    </tr>
+                </tbody>
+                <% } %>
+            </table>
+            <div>
+                <br><br><br>
+                <p style="color:rgba(63, 63, 65, 0.648)">- MoRS: Months of Remaining Shelflife</p>
+                <p style="color:rgba(63, 63, 65, 0.648)"> - QC: # Routine Quality Control
+                    - CP: # Product Complaints received
+                    - PV: # Adverse Drugs Reactions reported</p>
+
+
+
+                <% if(status !=="All" ) {%>
+                    <a href="/productLots">Back to All Batches</a>
+                    <br>
+                    <% }%>
+                        <br>
+
+
+
+                        <script>
+                            function sortTable(n) {
+                                var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+                                table = document.getElementById("batchTable");
+                                switching = true;
+                                // Set the sorting direction to ascending:
+                                dir = "asc";
+                                /* Make a loop that will continue until
+                                no switching has been done: */
+                                while (switching) {
+                                    // Start by saying: no switching is done:
+                                    switching = false;
+                                    rows = table.rows;
+                                    /* Loop through all table rows (except the
+                                    first, which contains table headers): */
+                                    for (i = 1; i < (rows.length - 1); i++) {
+                                        // Start by saying there should be no switching:
+                                        shouldSwitch = false;
+                                        /* Get the two elements you want to compare,
+                                        one from current row and one from the next: */
+                                        x = rows[i].getElementsByTagName("TD")[n];
+                                        y = rows[i + 1].getElementsByTagName("TD")[n];
+                                        /* Check if the two rows should switch place,
+                                        based on the direction, asc or desc: */
+                                        if (dir == "asc") {
+                                            if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                                                // If so, mark as a switch and break the loop:
+                                                shouldSwitch = true;
+                                                break;
+                                            }
+                                        } else if (dir == "desc") {
+                                            if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                                                // If so, mark as a switch and break the loop:
+                                                shouldSwitch = true;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                    if (shouldSwitch) {
+                                        /* If a switch has been marked, make the switch
+                                        and mark that a switch has been done: */
+                                        rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                                        switching = true;
+                                        // Each time a switch is done, increase this count by 1:
+                                        switchcount++;
+                                    } else {
+                                        /* If no switching has been done AND the direction is "asc",
+                                        set the direction to "desc" and run the while loop again. */
+                                        if (switchcount == 0 && dir == "asc") {
+                                            dir = "desc";
+                                            switching = true;
+                                        }
+                                    }
+                                }
+                            }
+                        </script>
+
+                        <script>
+                            function myFunction() {
+                                // Declare variables
+                                var input, filter, table, tr, td, i, txtValue;
+                                input = document.getElementById("myInput2");
+                                filter = input.value.toUpperCase();
+                                table = document.getElementById("batchTable");
+                                tr = table.getElementsByTagName("tr");
+
+                                // Loop through all table rows, and hide those who don't match the search query
+                                for (i = 0; i < tr.length; i++) {
+                                    td = tr[i].getElementsByTagName("td")[0];
+                                    if (td) {
+                                        txtValue = td.textContent || td.innerText;
+                                        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                                            tr[i].style.display = "";
+                                        } else {
+                                            tr[i].style.display = "none";
+                                        }
+                                    }
+                                }
+                            }
+                        </script>
+
+
+
+
+
+                        <hr> <br>
+                        <a href="/">IRIMS Home</a>
+            </div>
+        </div>

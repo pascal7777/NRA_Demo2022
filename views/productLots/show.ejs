@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IRMIS</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <script src="/js/bootstrap.min.js"></script>
+    <link rel="shortcut icon" type="image/x-icon" sizes="16x16 64x64" href="/images/art3.ico">
+</head>
+
+
+
+<body class="d-flex flex-column vh-100" style="color:rgb(6, 78, 246)">
+
+    <div class="container">
+
+
+
+        <div class="card mb-3">
+
+
+            <div class="card-body">
+                <h2>
+                    Batch Number: <%= productLot.lotNumber %>
+                </h2>
+                <h3>
+                    Product Name: <a href="/products/<%=productLot.product._id%>">
+                        <%= productLot.product.productName%>
+                    </a>
+
+                </h3>
+            </div>
+        </div>
+        <p style="color:rgba(63, 63, 65, 0.648)">Batch events (QC testing, Product Complaints, ADRs/vigilance) can be
+            added only for batches
+            that have been released to market or otherwises authorized for use (Clinical trials, or EUA)</p>
+
+
+        <div class="row">
+            <div class="col">
+                <h6>
+                    Batch created by: <strong>
+                        <%= productLot.authorLot.username %>
+                    </strong>
+                    at: <%= productLot.createdAt.toDateString()%> (
+                        <%= - Math.floor( (productLot.createdAt - Date.now())/10368000000)%> weeks ago)
+                            <br>Last changed status
+                            at: <%= productLot.updatedAt.toDateString()%> (
+                                <%= - Math.floor( (productLot.updatedAt - Date.now())/10368000000)%> weeks ago)
+
+                </h6>
+            </div>
+            <div class="col">
+
+            </div>
+            <div class="col-2">
+                <h6>
+                    current Login: <strong>
+                        <%= currentUser.username%>
+                    </strong><a style="color:rgb(7, 157, 250)" href="/logout"> logout</a>
+                </h6>
+            </div>
+        </div>
+
+        <div class="card mb-3">
+            <div class="card-body">
+
+                <ul>
+                    <li>Active(s): <%= productLot.product.innName%>
+                    </li>
+                    <li>
+                        Strength: <%= productLot.product.strength%>
+
+                            <%= productLot.product.strengthUnit%>
+                    </li>
+                    <li>
+                        Dosage Form: <%= productLot.product.dosageForm%>
+                    </li>
+                    <li>
+                        Product is: <strong>
+                            <% if(productLot.product.status==="SUSPENDED" ) {%>
+                                <span style="color:rgb(234, 0, 255)">
+                                    <%=productLot.product.status %>
+                                </span>
+                                <% } %>
+
+                                    <% if(productLot.product.status==="REJECTED" ) {%>
+                                        <span style="color:rgb(255, 17, 0)">
+                                            <%=productLot.product.status %>
+                                        </span>
+                                        <% } %>
+
+                                            <% if(productLot.product.status==="APPROVED" ) {%>
+                                                <span style="color:rgb(9, 143, 1)">
+                                                    <%=productLot.product.status %>
+                                                </span>
+                                                <% } %>
+
+                                                    <% if(productLot.product.status==="CTSTUDY" ) {%>
+                                                        <span style="color:rgb(255, 185, 8)">
+                                                            <%=productLot.product.status %>
+                                                        </span>
+                                                        <% } %>
+
+                                                            <% if(productLot.product.status==="EUA" ) {%>
+                                                                <span style="color:rgb(255, 185, 8)">
+                                                                    <%=productLot.product.status %>
+                                                                </span>
+                                                                <% } %>
+                        </strong>
+                    </li>
+                    <li>Registration Number: <%= productLot.product.maNumber%>
+                    </li>
+
+                </ul>
+
+
+                <div>
+
+                    <ul>
+
+
+                        <li>
+                            Manufacturing Date: <%= productLot.manufacture %>
+                        </li>
+                        <li>
+                            Expiration Date: <%= productLot.expire %>
+                        </li>
+                        <li>
+                            Batch Size: <%= productLot.size %> * packsize <%=productLot.product.packSize %>
+                        </li>
+                        <li>
+                            Batch COA Issued by (QC lab): <%= productLot.qcLab %>
+                        </li>
+                        <li>
+                            Batch Status: <strong>
+                                <% if(productLot.status==="HOLD" ) {%>
+                                    <span style="color:rgb(234, 0, 255)">
+                                        <%=productLot.status %>
+                                    </span>
+                                    <% } %>
+
+                                        <% if(productLot.status==="RECALLED (SUBSTANDARD)" ) {%>
+                                            <span style="color:rgb(255, 17, 0)">
+                                                <%=productLot.status %>
+                                            </span>
+                                            <% } %>
+                                                <% if(productLot.status==="RECALLED (FALSFIED)" ) {%>
+                                                    <span style="color:rgb(255, 17, 0)">
+                                                        <%=productLot.status %>
+                                                    </span>
+                                                    <% } %>
+
+                                                        <% if(productLot.status==="RELEASED" ) {%>
+                                                            <span style="color:rgb(9, 143, 1)">
+                                                                <%=productLot.status %>
+                                                            </span>
+                                                            <% } %>
+
+                                                                <% if(productLot.status==="CTSTUDY" ) {%>
+                                                                    <span style="color:rgb(255, 185, 8)">
+                                                                        <%=productLot.status %>
+                                                                    </span>
+                                                                    <% } %>
+
+                                                                        <% if(productLot.status==="EUA" ) {%>
+                                                                            <span style="color:rgb(255, 185, 8)">
+                                                                                <%=productLot.status %>
+                                                                            </span>
+                                                                            <% } %>
+
+                                                                                <% if(productLot.status==="QC" ) {%>
+                                                                                    <span
+                                                                                        style="color:rgb(250, 112, 7)">
+                                                                                        <%=productLot.status %>
+                                                                                    </span>
+                                                                                    <% } %>
+                            </strong>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+
+
+
+            <% if(currentUser && currentUser.isAdmin) {%>
+                <div> <a class="btn btn-warning" href="/productLots/<%=productLot._id%>/status" role="button">Change
+                        Batch
+                        Status</a>
+                </div>
+                <% } %>
+
+                    <br>
+                    <br>
+
+        </div>
+
+        <div class="row">
+
+            <div class="col-4">
+                <div class="card mb-3">
+                    <div class="card-body">
+
+                        <% if(productLot.status==="RELEASED" ) {%>
+                            <h3>Routine Quality Control</h3>
+                            <form action="/productLots/<%=productLot._id%>/commentqcs" method="POST"
+                                class="mb-3 validated-form" novalidate>
+                                <div class="mb-3">
+                                    <label class="form-label" for="bodyqc">Describe Event</label>
+                                    <textarea class="form-control" name="commentqc[bodyqc]" id="bodyqc" cols="30"
+                                        rows="3" required></textarea>
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
+                                </div>
+                                <button class="btn btn-success">Submit</button>
+                            </form>
+                            <% } %>
+
+                                <h4 class="card-title mb-2 text-muted"> Quality Control results to be followed
+                                    up/adressed</h4>
+                                <% for(let commentqc of productLot.commentqcs) { %>
+                                    <div class="card mb-3 ">
+                                        <div class="card-body">
+                                            <h6 class="card-subtitle mb-2 text-muted">
+                                                <em>Entered By: <%= commentqc.authorQc.username%> - at: <%=
+                                                            commentqc.createdAt.toDateString()%> (
+                                                            <%= - Math.floor( (commentqc.createdAt -
+                                                                Date.now())/10368000000)%> weeks ago)
+                                                </em>
+                                            </h6>
+                                            <p class="card-text">QC reported event: <br>
+                                                <span style="color:black">
+                                                    <%= commentqc.bodyqc %>
+                                                </span>
+                                            </p>
+                                            <% if( currentUser && commentqc.authorQc.equals(currentUser._id) ||
+                                                currentUser && currentUser.isAdmin) {%>
+                                                <form
+                                                    action="/productLots/<%=productLot._id%>/commentqcs/<%=commentqc._id%>?_method=DELETE"
+                                                    method="POST">
+                                                    <button class="btn btn-sm btn-danger">Delete</button>
+                                                </form>
+                                                <% } %>
+                                        </div>
+                                    </div>
+                                    <% } %>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-4">
+                <div class="card mb-3">
+                    <div class="card-body">
+
+
+                        <% if(productLot.status==="RELEASED" ) {%>
+                            <h3>Product Complaints Reported</h3>
+                            <form action="/productLots/<%=productLot._id%>/commentcps" method="POST"
+                                class="mb-3 validated-form" novalidate>
+                                <div class="mb-3">
+                                    <label class="form-label" for="bodycp">Describe
+                                        Complaint</label>
+                                    <textarea class="form-control" name="commentcp[bodycp]" id="bodycp" cols="30"
+                                        rows="3" required></textarea>
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
+                                </div>
+                                <button class="btn btn-success">Submit</button>
+                            </form>
+                            <% } %>
+                                <h4 class="card-title mb-2 text-muted">
+                                    Product complaints to be followed up/dispositioned</h4>
+                                <% for(let commentcp of productLot.commentcps) { %>
+                                    <div class="card mb-3 ">
+                                        <div class="card-body">
+                                            <h6 class="card-subtitle mb-2 text-muted">
+                                                <em>Entered By: <%= commentcp.authorCp.username%> - at: <%=
+                                                            commentcp.createdAt.toDateString()%> (
+                                                            <%= - Math.floor( (commentcp.createdAt -
+                                                                Date.now())/10368000000)%> weeks ago)
+                                                </em>
+                                            </h6>
+                                            <p class="card-text">reported Complaint: <br>
+                                                <span style="color:black">
+                                                    <%=commentcp.bodycp %>
+                                                </span>
+                                            </p>
+                                            <% if( currentUser && commentcp.authorCp.equals(currentUser._id) ||
+                                                currentUser && currentUser.isAdmin) {%>
+                                                <form
+                                                    action="/productLots/<%=productLot._id%>/commentcps/<%=commentcp._id%>?_method=DELETE"
+                                                    method="POST">
+                                                    <button class="btn btn-sm btn-danger">Delete</button>
+                                                </form>
+                                                <% } %>
+                                        </div>
+                                    </div>
+                                    <% } %>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-4">
+                <div class="card mb-3">
+                    <div class="card-body">
+
+                        <% if(productLot.status==="RELEASED" ) {%>
+                            <h3>Vigilance/ADRs Reported</h3>
+                            <form action="/productLots/<%=productLot._id%>/commentpvs" method="POST"
+                                class="mb-3 validated-form" novalidate>
+                                <div class="mb-3">
+                                    <label class="form-label" for="bodypv">Describe
+                                        Event</label>
+                                    <textarea class="form-control" name="commentpv[bodypv]" id="bodypv" cols="30"
+                                        rows="3" required></textarea>
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
+                                </div>
+                                <button class="btn btn-success">Submit</button>
+                            </form>
+                            <% } %>
+                                <h4 class="card-title mb-2 text-muted">
+                                    Vigilance events to be followed up/closed</h4>
+                                <% for(let commentpv of productLot.commentpvs) { %>
+                                    <div class="card mb-3 ">
+                                        <div class="card-body">
+                                            <h6 class="card-subtitle mb-2 text-muted">
+                                                <em>Entered By: <%= commentpv.authorPv.username%> - at: <%=
+                                                            commentpv.createdAt.toDateString()%> (
+                                                            <%= - Math.floor( (commentpv.createdAt -
+                                                                Date.now())/10368000000)%> weeks ago)
+                                                </em>
+                                            </h6>
+                                            <p class="card-text">PV reported event: <br>
+                                                <span style="color:black">
+                                                    <%= commentpv.bodypv %>
+                                                </span>
+                                            </p>
+                                            <% if( currentUser && commentpv.authorPv.equals(currentUser._id) ||
+                                                currentUser && currentUser.isAdmin) {%>
+                                                <form
+                                                    action="/productLots/<%=productLot._id%>/commentpvs/<%=commentpv._id%>?_method=DELETE"
+                                                    method="POST">
+                                                    <button class="btn btn-sm btn-danger">Delete</button>
+                                                </form>
+                                                <% } %>
+                                        </div>
+                                    </div>
+                                    <% } %>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <br>
+        <br>
+
+        <% if(currentUser && currentUser.isAdmin) {%>
+            <form action="/productLots/<%=productLot._id%>?_method=DELETE" method="POST">
+                <button class="btn-danger btn-sm">Delete this Batch (and its PMS
+                    data)</button>
+            </form>
+            <% } %>
+
+
+
+
+
+                <hr>
+                <a href="/products/<%=productLot.product._id%>">Back to Product Details</a>
+                <br>
+                <br>
+                <a href="/productLots">Batch Index</a>
+                <br>
+                <br>
+                <a href="/">IRIMS Home</a>
+
+    </div>
+
+
+
+</body>
+
+
+</html>

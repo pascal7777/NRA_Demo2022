@@ -1,0 +1,79 @@
+<% layout('layouts/boilerplate')%>
+
+    <div class="container mt-3">
+        <h1>Manufacturer Status Change</h1>
+        <p style="color:rgba(63, 63, 65, 0.648)">If status of a Site is downgraded from Approved to Suspended (or
+            Rejected),
+            review and update as needed the status of associated products and batches released to the market.
+        </p>
+        <br>
+        <h2>
+            Manufacturer Name: <%=manufacturer.company%> - Site: <%=manufacturer.siteName%>
+        </h2>
+
+
+
+
+        <form action="/manufacturers/<%=manufacturer._id%>?_method=PUT" method="POST">
+            <br>
+            <label for="status">
+                <h4>Update Status from <% if(manufacturer.status==="SITE_SUSPENDED" ) {%>
+                        <span style="color:rgb(234, 0, 255)">
+                            <%=manufacturer.status %>
+                        </span>
+                        <% } %>
+
+                            <% if(manufacturer.status==="SITE_REJECTED" ) {%>
+                                <span style="color:rgb(255, 17, 0)">
+                                    <%=manufacturer.status %>
+                                </span>
+                                <% } %>
+
+                                    <% if(manufacturer.status==="SITE_APPROVED" ) {%>
+                                        <span style="color:rgb(9, 143, 1)">
+                                            <%=manufacturer.status %>
+                                        </span>
+                                        <% } %>
+
+                                            <% if(manufacturer.status==="SITE_INSPECTION" ) {%>
+                                                <span style="color:rgb(250, 112, 7)">
+                                                    <%=manufacturer.status %>
+                                                </span>
+                                                <% } %>
+
+
+
+                                                    to:</h4>
+            </label>
+            <h5><select name="manufacturer[status]" id="status">
+                    <option value="">--Select--</option>
+                    <option value="SITE_APPROVED">APPROVED</option>
+                    <option value="SITE_SUSPENDED">Suspended</option>
+                    <option value="SITE_REJECTED">Rejected</option>
+                </select></h5>
+            <br>
+
+            <br>
+            <br>
+            <div>
+                <button class=" btn btn-warning btn-sm">Confirm Status Change</button>
+            </div>
+        </form>
+        <br>
+
+        <hr>
+
+        <br>
+        <a class=" btn btn-primary btn-sm" href="/manufacturers/<%=manufacturer._id%>" role="button">Go Back to
+            Manufacturer
+            details</a>
+        <br>
+        <br>
+        <a href="/">Home</a>
+    </div>
+
+
+
+    <br>
+
+    </div>

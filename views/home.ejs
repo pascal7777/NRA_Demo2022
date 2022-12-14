@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IRMIS</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <link rel="shortcut icon" type="image/x-icon" sizes="16x16 64x64" href="/images/art3.ico">
+    <style>
+        /* Custom style to prevent carousel from being distorted 
+           if for some reason image doesn't load */
+        .carousel-item {
+            min-height: 180px;
+            max-height: 250px;
+        }
+    </style>
+</head>
+
+
+
+
+<body class="d-flex flex-column vh-100">
+    <div class="container">
+
+        <main>
+
+
+            <nav class="navbar navbar-dark bg-primary">
+                <div class="container-fluid">
+
+                    <div class="navbar-nav"><span style=" color:lightcyan">
+                            <h2>App for Online Registration and Post Market Surveillance of Medicines and Vaccines
+                            </h2>
+                        </span>
+                    </div>
+
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false"
+                        aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarScroll">
+                        <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll"
+                            style="--bs-scroll-height: 200px;">
+
+                            <div class="row">
+                                <div class="col-9">
+
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="/manufacturers">
+                                            <h5><span style="color:rgb(181, 247, 247)">- Manufacturers</span></h5>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="/products">
+                                            <h5><span style="color:rgb(181, 247, 247)">- Product Index</span></h5>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="/productLots">
+                                            <h5><span style="color:rgb(181, 247, 247)">- Batch Index</span></h5>
+                                        </a>
+                                    </li>
+                                </div>
+                                <div class="col-3">
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="/eoiProducts">
+                                            <h5><span style="color:rgb(200, 201, 204)">- Priority Products</span>
+                                            </h5>
+                                        </a>
+                                    </li>
+                                </div>
+                            </div>
+                        </ul>
+
+                    </div>
+
+
+                </div>
+                <div>
+                    <% if(!currentUser) {%>
+                        <a style="color:rgb(200, 201, 204)" class="nav-link" href="/login">Login</a>
+                        <a style="color:rgb(200, 201, 204)" class="nav-link" href="/register">Register</a>
+                        <% } else {%>
+                            <a style="color:rgb(200, 201, 204)" class="nav-link" href="/logout">
+                                <%= currentUser.username%> - Logout
+                            </a>
+                            <% } %>
+
+                </div>
+
+            </nav>
+
+
+
+
+            <div id="myCarousel" class="carousel carousel slide" data-bs-ride="carousel">
+                <!-- Carousel indicators -->
+                <ol class="carousel-indicators">
+                    <li data-bs-target="#myCarousel" data-bs-slide-to="0" class="active"></li>
+                    <li data-bs-target="#myCarousel" data-bs-slide-to="1"></li>
+                    <li data-bs-target="#myCarousel" data-bs-slide-to="2"></li>
+                    <li data-bs-target="#myCarousel" data-bs-slide-to="3"></li>
+                    <li data-bs-target="#myCarousel" data-bs-slide-to="4"></li>
+                    <li data-bs-target="#myCarousel" data-bs-slide-to="5"></li>
+                    <li data-bs-target="#myCarousel" data-bs-slide-to="6"></li>
+                    <li data-bs-target="#myCarousel" data-bs-slide-to="7"></li>
+                    <li data-bs-target="#myCarousel" data-bs-slide-to="8"></li>
+                </ol>
+
+                <!-- Wrapper for carousel items -->
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <img src="/images/homepic.png" class="d-block w-100" alt="Slide 1">
+                        <div class="carousel-caption d-none d-md-block">
+                            <h3 style="color:rgb(181, 247, 247)"><a href="/rs">National Regulatory System -
+                                    <strong>
+                                        (RS)</strong></a>
+                            </h3>
+                            <h4 style="color:lightcyan">Legal provisions and regulations define
+                                requirements of
+                                transparency and dissemination of information to the public and
+                                relevant
+                                stakeholders.</h4>
+                        </div>
+                    </div>
+                    <div class=" carousel-item">
+                        <img src="/images/homepic.png" class="d-block w-100" alt="Slide 2">
+                        <div class="carousel-caption d-none d-md-block">
+                            <h3 style="color:rgb(181, 247, 247)"><a href="/ma">Registration and Marketing
+                                    Authorization - <strong> (MA)</strong></a></h3>
+                            <h4 style="color:lightcyan"> Web site or other official publication
+                                with SPC-like
+                                information is <br> available and regularly updated.</h4>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="/images/homepic.png" class="d-block w-100" alt="Slide 3">
+                        <div class="carousel-caption d-none d-md-block">
+                            <h3 style="color:rgb(181, 247, 247)"><a href="/vl">Vigilance - <strong>
+                                        (Vl)</strong></a>
+                            </h3>
+                            <h4 style="color:lightcyan">Vigilance activities and relevant
+                                feedback
+                                are
+                                appropriately communicated to the public.</h4>
+                        </div>
+                    </div>
+
+                    <div class="carousel-item">
+                        <img src="/images/homepic.png" class="d-block w-100" alt="Slide 4">
+                        <div class="carousel-caption d-none d-md-block">
+
+                            <h3 style="color:rgb(181, 247, 247)"><a href="/mc">Market Surveillance and Control -
+                                    <strong> (MC)</strong></a></h3>
+
+                            <h4 style="color:lightcyan">Documented and implemented procedures
+                                and
+                                mechanisms exist
+                                to prevent, detect and respond to substandard and or falsified medical
+                                products.
+                            </h4>
+                        </div>
+                    </div>
+
+                    <div class="carousel-item">
+                        <img src="/images/homepic.png" class="d-block w-100" alt="Slide 5">
+                        <div class="carousel-caption d-none d-md-block">
+                            <h3 style="color:rgb(181, 247, 247)"><a href="/li">Licensing Establishments -
+                                    <strong>
+                                        (LI)</strong></a></h3>
+                            <h4 style="color:lightcyan">In order to protect public health, licensing
+                                activities
+                                are of
+                                outstanding importance and are considered fundamental, together
+                                with inspections activities, for guaranteeing
+                                the quality, safety and efficacy of medical products used within
+                                or
+                                exported out of the country.</h4>
+                        </div>
+                    </div>
+
+                    <div class="carousel-item">
+                        <img src="/images/homepic.png" class="d-block w-100" alt="Slide 6">
+                        <div class="carousel-caption d-none d-md-block">
+                            <h3 style="color:rgb(181, 247, 247)"><a href="/ri">Regulatory Inspection - <strong>
+                                        (RI)</strong></a></h3>
+                            <h4 style="color:lightcyan">A <strong>database</strong> is
+                                established and regularly updated of all
+                                establishments which may be subject to inspection, along with
+                                their relevant regulatory decisions.</h4>
+                        </div>
+                    </div>
+
+                    <div class="carousel-item">
+                        <img src="/images/homepic.png" class="d-block w-100" alt="Slide 7">
+                        <div class="carousel-caption d-none d-md-block">
+                            <h3 style="color:rgb(181, 247, 247)"><a href=" /lt">Laboratory Testing - <strong>
+                                        (LT)</strong></a></h3>
+                            <h4 style="color:lightcyan">Laboratory testing activities are
+                                appropriately
+                                communicated to the public community.</h4>
+                        </div>
+                    </div>
+
+                    <div class="carousel-item">
+                        <img src="/images/homepic.png" class="d-block w-100" alt="Slide 8">
+                        <div class="carousel-caption d-none d-md-block">
+                            <h3 style="color:rgb(181, 247, 247)"><a href="/ct">Clinical Trials Oversight -
+                                    <strong>
+                                        (CT)</strong></a></h3>
+                            <h4 style="color:lightcyan">There are guidelines on the format and
+                                content of Clinical Trial applications.</h4>
+                        </div>
+                    </div>
+
+                    <div class="carousel-item">
+                        <img src="/images/homepic.png" class="d-block w-100" alt="Slide 9">
+                        <div class="carousel-caption d-none d-md-block">
+                            <h3 style="color:rgb(181, 247, 247)"><a href="/lr">NRA Lot Release - <strong>
+                                        (LR)</strong></a></h3>
+                            <h4 style="color:lightcyan">Results of lot release process are
+                                publicly available.</h4>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Carousel controls -->
+                <a class="carousel-control-prev" href="#myCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon"></span>
+                </a>
+                <a class="carousel-control-next" href="#myCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon"></span>
+                </a>
+            </div>
+            <!-- <div class="row">
+                        <div class="col-lg-7 col-sm-6">
+
+                            <img src="/images/art.png" class="img-fluid" alt="tablets" width="650" height="450">
+
+                        </div>
+
+                        <div class="col-lg-5 col-sm-6" style="font-size: 16px; text-align: justify;" class="text-muted">
+                            <p style="font-size: 18px;text-align: justify; margin-top: 1em;" class="text-muted"><em>"The
+                                    National
+                                    Regulatory
+                                    Authority (NRA) is the
+                                    institution in charge of assuring the quality, safety, and efficacy of medical
+                                    products
+                                    as well
+                                    as ensuring the relevance and accuracy of product information. A sustainable,
+                                    well-functioning
+                                    regulatory system will ensure an independent and competent oversight of medical
+                                    products"</em>
+                            </p> <br>
+                            NRA's in Low and Middle Income
+                            countries (LMICs) have, often
+                            with limited resources, worked within the jurisdiction of their national territory.
+                            The need to collaborate on a regional as well as at an international level has become
+                            increasingly
+                            paramount in fighting for access to quality-assured medicines and vaccines. Additionally,
+                            NRAs
+                            in
+                            LMICs need to be able to exercise critical control functions, competently and independently,
+                            while
+                            being able to enforce regulatory standards. <br><br><br>For an NRA in an LMIC to be
+                            recognized
+                            regionally
+                            and
+                            internationally, it has to be functioning at a transparent level of performance, backed up
+                            by
+                            evidence-based outcomes that are open to peer review. Hence, achieving a sufficient maturity
+                            level
+                            for its operating systems in the following nine subsystems defined by the WHO, and measured
+                            by
+                            defined performance indicators, is key. <br><br><br> Using a robust online database as an
+                            Integrated
+                            Regulatory
+                            Information Management System (IRIMS) that allows applicants to
+                            submit their electronic applications with a public website for dissimination of information
+                            is a
+                            powerful tool to underpin the maturity level of a NRA on a scale of 1 (existence of some
+                            elements of
+                            regulatory system) to 4 (operating at advanced level of performance and continuous
+                            improvement).
+                        </div>
+                    </div> -->
+
+
+
+        </main>
+
+
+
+        <br>
+
+
+        <div class="container">
+
+            <p style="color:rgba(63, 63, 65, 0.648)">
+                With publication of the relevant information to Applicants and the Public.
+                Based on (1) Indicators in the WHO <a href="https://www.who.int/publications/i/item/9789240020245"
+                    target="_blank">
+                    Global Benchmarking Tool (GBT)</a> for the Evaluation of National Regulatory Systems
+                and (2) WHO's Listed Authority "
+                <a href="https://www.who.int/initiatives/who-listed-authority-reg-authorities" target="_blank">(WLA)
+                    Initiative</a>" which is aimed at promoting access and supply of safe, effective and quality
+                medical
+                products.
+            </p>
+        </div>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+
+        <footer class="footer pt-2 mt-auto">
+
+            <div class="container">
+                <p style="font-size: 12px" class="text-muted">
+                    Express Node.js web application stacked non-SQL MongoDB (MEAN), built by Pascal - Email:
+                    irims.asia@gmail.com<br>All rights reserved.
+                </p>
+            </div>
+
+        </footer>
+
+
+
+
+
+        <script>
+            // Example starter JavaScript for disabling form submissions if there are invalid fields
+            (function () {
+                'use strict'
+
+                // Fetch all the forms we want to apply custom Bootstrap validation styles to
+                const forms = document.querySelectorAll('.validatedForm')
+
+                // Loop over them and prevent submission
+                Array.from(forms)
+                    .forEach(function (form) {
+                        form.addEventListener('submit', function (event) {
+                            if (!form.checkValidity()) {
+                                event.preventDefault()
+                                event.stopPropagation()
+                            }
+                            form.classList.add('was-validated')
+                        }, false)
+                    })
+            })()
+        </script>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+
+</html>

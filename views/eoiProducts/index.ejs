@@ -1,0 +1,251 @@
+<% layout('layouts/boilerplate')%>
+
+    <div class="container mt-3">
+
+        <nav class="navbar  navbar-expand-lg navbar-light" style="background-color: #c7c7ca;">
+            <div class="container-fluid">
+                <div><a class="navbar-brand" style="color:white; padding-left: 0.5em;"
+                        href="/"><strong>IRIMS</strong></a>
+                </div>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarNavDropdown" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                    <ul class="navbar-nav">
+                        <li>
+                            <a class="btn btn-warning btn-sm"
+                                style=" margin-left: 15px; margin-right: 15px; margin-top: 5px; margin-bottom: 5px"
+                                href="/eoiProducts?route=FULL_CTD" role="button">
+                                Full CTD
+                            </a>
+                        </li>
+                        <li><a class="btn btn-warning btn-sm"
+                                style=" margin-left: 15px; margin-right: 15px; margin-top: 5px; margin-bottom: 5px"
+                                href="./eoiProducts?route=ABBREVIATED" role="button">
+                                Abbreviated
+                            </a></li>
+
+                        <li> <a class="btn btn-warning btn-sm"
+                                style=" margin-left: 15px; margin-right: 15px; margin-top: 5px; margin-bottom: 5px"
+                                href="./eoiProducts?route=CRP_WHOPQ" role="button">
+                                CRP WHO-PQ
+                            </a></li>
+
+                        <li><a class="btn btn-warning btn-sm"
+                                style=" margin-left: 15px; margin-right: 15px; margin-top: 5px; margin-bottom: 5px"
+                                href="./eoiProducts?route=JOINT_MRA" role="button">
+                                Joint MRA
+                            </a></li>
+                    </ul>
+
+                    <div class="navbar-nav ml-auto" style="padding-left: 8em">
+                        <input type=" text" id="myInput5" onkeyup="myFunction()"
+                            style="width:14em; padding: 5px 5px 5px 10px" placeholder="Search Therapeutic area ...">
+                    </div>
+                    <div class="navbar-nav ml-auto" style="padding-left: 5em;">
+                        <% if(!currentUser) {%>
+                            <a style="color:lightcyan" class="nav-link" href="/login">Login</a>
+                            <% } else {%>
+                                <a style="color:lightcyan" class="nav-link" href="/logout">
+                                    <%= currentUser.username%> - Logout
+                                </a>
+                                <% } %>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <div>
+            <span style="color:#c7c7ca">
+                <%= Date()%>
+            </span>
+        </div>
+
+
+        <br>
+
+        <h1><span style="color: #1e74ec">Priority Products (<%= eoiProducts.length%>)</span></h1>
+        <p style="color:rgba(63, 63, 65, 0.648)">The aim of Notices of Invitation to Express Interest for Product
+            Registration is to increase the range of
+            selected products and sources available for selected essential
+            medicines and improve equitable access to effective prevention and treatment of disease. Interested
+            applicants are
+            encouraged to submit documentation for recommended dosage forms and strengths of
+            the medicinal products listed below which have been identified as priority products.</p>
+        <p style="color:rgba(63, 63, 65, 0.648)">Assessment of product(s) submitted under this Invitation will include
+            evaluation of:
+            • product dossiers, which must include product data and information as specified in the ICH <a
+                href="https://www.ich.org/page/ctd" target="_blank">CTD</a> format or
+            equivalent acceptable guidelines
+            • manufacturing sites, which must adhere to international acceptable good manufacturing practices <a
+                href="https://www.who.int/teams/health-product-policy-and-standards/standards-and-specifications/gmp"
+                target="_blank">(GMP)</a>
+            • clinical sites (if applicable), which must adhere to good clinical practices (GCP) as defined by the <a
+                href="https://www.ich.org/page/efficacy-guidelines">ICH</a>.
+        </p>
+        <% if(currentUser && currentUser.isAdmin) {%><a href="/eoiProducts/new">Add New EOI product
+                here</a>
+            <% } %>
+                <br><br>
+
+
+                <div class="table-responsive">
+                    <table class="table" id="eoiProductTable">
+
+                        <thead>
+                            <tr>
+                                <th>
+                                    <h6>Therapeutic Area</h6>
+                                </th>
+                                <th>
+                                    <h6>ATC code</h6>
+                                </th>
+                                <th onclick="sortTable(0)">
+                                    <h6>INN Name</h6>
+                                </th>
+                                <th>
+                                    <h6>Dosage Form</h6>
+                                </th>
+                                <th>
+                                    <h6>Dosage unit</h6>
+                                </th>
+
+                                <th>
+                                    <h6>Demand Forecast (units/year)</h6>
+                                </th>
+                                <th>
+                                    <h6>Due date for EOI submission</h6>
+                                </th>
+                                <th>
+                                    <h6>Regulatory Pathway</h6>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            <% for (let eoiProduct of eoiProducts) { %>
+                                <tr>
+                                    <td>
+                                        <%= eoiProduct.indication%>
+                                    </td>
+                                    <td>
+                                        <%= eoiProduct.atcCode%>
+                                    </td>
+                                    <td>
+                                        <%= eoiProduct.name%>
+                                    </td>
+                                    <td>
+                                        <%= eoiProduct.dosageForm%>
+                                    </td>
+                                    <td>
+                                        <%= eoiProduct.strength%>
+                                            <%= eoiProduct.strengthUnit%>
+                                    </td>
+                                    <td>
+                                        <%= eoiProduct.demandAnnual%>
+                                    </td>
+                                    <td>
+                                        <%= eoiProduct.date.toDateString()%>
+                                            (<%= Math.floor( (eoiProduct.date - Date.now())/(1000*60*60*24*7))%> weeks
+                                                left)
+                                    </td>
+                                    <td>
+                                        <%= eoiProduct.route%>
+                                    </td>
+                                </tr>
+                        </tbody>
+                        <% } %>
+                    </table>
+                </div>
+
+
+                <% if(route !=="All" ) {%>
+                    <a href="/eoiProducts">Back to All EOI Products</a>
+
+                    <% }%>
+
+                        <script>
+                            function sortTable(n) {
+                                var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+                                table = document.getElementById("eoiProductTable");
+                                switching = true;
+                                // Set the sorting direction to ascending:
+                                dir = "asc";
+                                /* Make a loop that will continue until
+                                no switching has been done: */
+                                while (switching) {
+                                    // Start by saying: no switching is done:
+                                    switching = false;
+                                    rows = table.rows;
+                                    /* Loop through all table rows (except the
+                                    first, which contains table headers): */
+                                    for (i = 1; i < (rows.length - 1); i++) {
+                                        // Start by saying there should be no switching:
+                                        shouldSwitch = false;
+                                        /* Get the two elements you want to compare,
+                                        one from current row and one from the next: */
+                                        x = rows[i].getElementsByTagName("TD")[n];
+                                        y = rows[i + 1].getElementsByTagName("TD")[n];
+                                        /* Check if the two rows should switch place,
+                                        based on the direction, asc or desc: */
+                                        if (dir == "asc") {
+                                            if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                                                // If so, mark as a switch and break the loop:
+                                                shouldSwitch = true;
+                                                break;
+                                            }
+                                        } else if (dir == "desc") {
+                                            if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                                                // If so, mark as a switch and break the loop:
+                                                shouldSwitch = true;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                    if (shouldSwitch) {
+                                        /* If a switch has been marked, make the switch
+                                        and mark that a switch has been done: */
+                                        rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                                        switching = true;
+                                        // Each time a switch is done, increase this count by 1:
+                                        switchcount++;
+                                    } else {
+                                        /* If no switching has been done AND the direction is "asc",
+                                        set the direction to "desc" and run the while loop again. */
+                                        if (switchcount == 0 && dir == "asc") {
+                                            dir = "desc";
+                                            switching = true;
+                                        }
+                                    }
+                                }
+                            }
+                        </script>
+
+                        <script>
+                            function myFunction() {
+                                // Declare variables
+                                var input, filter, table, tr, td, i, txtValue;
+                                input = document.getElementById("myInput5");
+                                filter = input.value.toUpperCase();
+                                table = document.getElementById("eoiProductTable");
+                                tr = table.getElementsByTagName("tr");
+
+                                // Loop through all table rows, and hide those who don't match the search query
+                                for (i = 0; i < tr.length; i++) {
+                                    td = tr[i].getElementsByTagName("td")[0];
+                                    if (td) {
+                                        txtValue = td.textContent || td.innerText;
+                                        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                                            tr[i].style.display = "";
+                                        } else {
+                                            tr[i].style.display = "none";
+                                        }
+                                    }
+                                }
+                            }
+                        </script>
+
+
+                        <br>
+                        <a href="/">IRIMS Home</a>
+    </div>

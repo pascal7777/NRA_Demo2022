@@ -1,0 +1,53 @@
+<% layout('layouts/boilerplate')%>
+
+    <div class="container mt-3">
+
+        <h1>Add a new Manufacturing Site</h1>
+        <p style="color:rgba(63, 63, 65, 0.648)">Status is by default 'under Inspection'</p>
+        <form action="/manufacturers" method="POST">
+            <div class="mb-2">
+                <label for="company">Manufacturer Name</label>
+                <input type="text" name="company" id="company" placeholder="Company Name">
+            </div>
+            <div class="mb-2">
+                <label for="city">City</label>
+                <input type="text" name="city" id="city" placeholder="City">
+            </div>
+            <div class="mb-2">
+                <label for="country">Country</label>
+                <input type="text" name="country" id="country" placeholder="Country">
+            </div>
+            <div class="mb-2">
+                <label for="siteName">Site Name</label>
+                <input type="text" name="siteName" id="siteName" placeholder="Site Name">
+            </div>
+            <div class="mb-2">
+                <label for="siteAdres">Site Address</label>
+                <input type="text" name="siteAdres" id="siteAdres" placeholder="Site Address">
+            </div>
+            <div class="mb-2">
+                <label for="productionLine">Production line</label>
+                <input type="text" name="productionLine" id="productionLine" placeholder="Production Line">
+            </div>
+
+            <!-- <div class="mb-2"><label for="productionLine">Production line</label>
+                <select multiple name="productionLine" id="productionLine">
+                    <option>oral solids</option>
+                    <option>sterile/terminal sterilisation</option>
+                    <option>sterile/aseptic</option>
+                </select>
+            </div> -->
+
+
+            <div class="mb-2">
+                <label for="annualCapacity">Annual Capacity</label>
+                <input type="text" name="annualCapacity" id="annualCapacity" placeholder="Annual Capacity">
+            </div>
+            <br> <br>
+            <button class="btn btn-primary">Submit</button>
+        </form>
+
+        <br>
+        <hr> <br>
+        <a href="/">IRIMS Home</a>
+    </div>

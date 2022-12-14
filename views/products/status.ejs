@@ -1,0 +1,91 @@
+<% layout('layouts/boilerplate')%>
+
+    <div class="container mt-3">
+        <h1>Product Status Change</h1>
+        <p style="color:rgba(63, 63, 65, 0.648)">If status of a Product is downgraded from Approved to Suspended (or
+            Rejected),
+            review and update as needed the status of associated batches released to the market.
+        </p>
+        <br>
+        <h2>
+            Product Name: <%=product.productName%>
+                <%=product.manufacturer.country%>
+        </h2>
+
+
+        <form action="/products/<%=product._id%>?_method=PUT" method="POST">
+
+            <br>
+            <hr>
+
+
+            <label for="status">
+                <h4>Update Status from <% if(product.status==="SUSPENDED" ) {%>
+                        <span style="color:rgb(234, 0, 255)">
+                            <%=product.status %>
+                        </span>
+                        <% } %>
+
+                            <% if(product.status==="REJECTED (SUBSTANDARD)" ) {%>
+                                <span style="color:rgb(255, 17, 0)">
+                                    <%=product.status %>
+                                </span>
+                                <% } %>
+
+                                    <% if(product.status==="APPROVED" ) {%>
+                                        <span style="color:rgb(9, 143, 1)">
+                                            <%=product.status %>
+                                        </span>
+                                        <% } %>
+
+                                            <% if(product.status==="REVIEW" ) {%>
+                                                <span style="color:rgb(250, 112, 7)">
+                                                    <%=product.status %>
+                                                </span>
+                                                <% } %>
+
+
+                                                    to:</h4>
+            </label>
+            <h5><select name="product[status]" id="status">
+                    <option value="">--Select--</option>
+                    <option value="APPROVED">Approved, Trials or EUA</option>
+                    <option value="SUSPENDED">Suspended</option>
+                    <option value="REJECTED (SUBSTANDARD)">Rejected</option>
+                </select></h5>
+            <br>
+
+            <div class="mb-2"><label class="registrationHolder" for="registrationHolder">Name Registration
+                    holder</label>
+                <input class="form-control" type="text" name="product[registrationHolder]" id="registrationHolder"
+                    value="<%=product.registrationHolder%>">
+            </div>
+            <div class="mb-2"><label class="maNumber" for="maNumber">Registration Number</label>
+                <input class="form-control" type="text" name="product[maNumber]" id="maNumber"
+                    value="<%=product.maNumber%>">
+            </div>
+
+
+            <br>
+            <br>
+            <div>
+                <button class=" btn btn-warning btn-sm">Confirm Status Change</button>
+            </div>
+        </form>
+
+
+
+        <hr>
+
+        <br>
+        <a class="btn btn-primary btn-sm" href="/products/<%=product._id%>" role="button">Go Back to Product details</a>
+        <br>
+        <br>
+        <a href="/">Home</a>
+    </div>
+
+
+
+    <br>
+
+    </div>

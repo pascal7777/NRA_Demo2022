@@ -1,0 +1,57 @@
+<% layout('layouts/boilerplate')%>
+
+    <div class="container mt-3">
+        <h2>Manufacturer Edit</h2>
+        <br>
+        <form action="/manufacturers/<%=manufacturer._id%>?_method=PUT" method="POST" novalidate class="validatedForm">
+
+
+            <div class="mb-1">
+                <label class="form-label" for="company">Company Name</label>
+                <input class="form-control" type="text" id="company" name="manufacturer[company]"
+                    value="<%=manufacturer.company%>">
+            </div>
+            <div class="mb-1">
+                <label class="form-label" for="city">City</label>
+                <input class="form-control" type="text" id="city" name="manufacturer[city]"
+                    value="<%=manufacturer.city%>">
+            </div>
+            <div class="mb-1">
+                <label class="form-label" for="country">Country</label>
+                <input class="form-control" type="text" id="country" name="manufacturer[country]"
+                    value="<%=manufacturer.country%>">
+            </div>
+            <div class="mb-1">
+                <label class="form-label" for="siteName">Site Name</label>
+                <input class="form-control" type="text" id="siteName" name="manufacturer[siteName]"
+                    value="<%=manufacturer.siteName%>">
+            </div>
+            <div class="mb-1">
+                <label class="form-label" for="siteAdres">Site Address</label>
+                <input class="form-control" type="text" id="siteAdres" name="manufacturer[siteAdres]"
+                    value="<%=manufacturer.siteAdres%>">
+            </div>
+            <div class="mb-1">
+                <label class="form-label" for="productionLine">Production line</label>
+                <input class="form-control" type="text" id="productionLine" name="manufacturer[productionLine]"
+                    value="<%=manufacturer.productionLine%>">
+            </div>
+            <div class="mb-1">
+                <label class="form-label" for="annualCapacity">Annual Capacity</label>
+                <input class="form-control" type="text" id="annualCapacity" name="manufacturer[annualCapacity]"
+                    value="<%=manufacturer.annualCapacity%>">
+            </div>
+            <div>
+                <button class="btn btn-primary"> Submit Edited Manufacturer </button>
+            </div>
+        </form>
+        <br>
+        <br>
+
+
+        <a class="btn btn-warning" href="/manufacturers/<%=manufacturer._id%>" role="button">Cancel editing</a>
+
+        <hr> <br>
+        <a href="/">IRIMS Home</a>
+
+    </div>
